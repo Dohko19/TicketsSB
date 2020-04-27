@@ -16,10 +16,6 @@ if(!empty($_POST))
     {
         header("Location: inicio.php");
     }
-    else
-    {
-        header("Location: index.php");
-    }
 }
 if(isset($_SESSION["token"]))
 {

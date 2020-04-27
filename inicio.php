@@ -1,6 +1,20 @@
+
 <?php
+
+ob_start();
 require_once("Config/db.php");
-?>
+include("./Config/usuario.php");
+$ts = gmdate("D, d M Y H:i:s") . " GMT";
+//var_dump($_POST);
+session_start();
+$user = new Usuario();
+
+if(!isset($_SESSION["token"]))
+{
+    header("Location: ./");
+}
+
+ ?>
 <html lang="es">
 <head>
     <meta charset="utf-8">
@@ -162,7 +176,7 @@ require_once("Config/db.php");
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Motivo del Ticket:</label>
                     <!--                        <input type="text" class="form-control" id="recipient-name">-->
-                    <select class="form-control" name="motivo" id="motivo">
+                    <select class="form-control" id="inputSelect" name="motivo" id="motivo">
                         <option value="1">Solicitud 4+1</option>
                         <option value="2">Compra jabonera(rota, robo, vandalismo)</option>
                         <option value="3">Cambio por uso Común</option>
@@ -173,8 +187,13 @@ require_once("Config/db.php");
                         <option value="8">Guia de envio de tapas</option>
                         <option value="8">LGS bimestrales</option>
                         <option value="9">Solicitud de portagalones</option>
-                        <option value="0">Otro</option>
+                        <option value="0" onchange="otromotivo()">Otro</option>
                     </select>
+                    <div class="form-group" id="txtoculto">
+                        <br>
+                        <label for="otromotivo"><strong> Otro Motivo: </strong></label>
+                        <textarea class="form-control" name="otromotivo" id="otromotivo" cols="10" rows="2"></textarea>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="message-text" class="col-form-label">Comentarios:</label>
@@ -189,9 +208,10 @@ require_once("Config/db.php");
                     <input class="form-control" type="file" name="Foto4" id="Foto4">
                     <input class="form-control" type="file" name="Foto5" id="Foto5">
                 </div>
+
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-info" data-dismiss="modal">Enviar</button>
+            <button type="submit" class="btn btn-info" >Enviar</button>
         </div>
         </form>
             <form>
@@ -620,7 +640,7 @@ require_once("Config/db.php");
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Motivo del Ticket:</label>
 <!--                        <input type="text" class="form-control" id="recipient-name">-->
-                        <select class="form-control" name="motivo" id="motivo">
+                        <select class="form-control" id="inputSelect" name="motivo" id="motivo">
                             <option value="1">Solicitud 4+1</option>
                             <option value="2">Compra jabonera(rota, robo, vandalismo)</option>
                             <option value="3">Cambio por uso Común</option>
@@ -631,8 +651,12 @@ require_once("Config/db.php");
                             <option value="8">Guia de envio de tapas</option>
                             <option value="8">LGS bimestrales</option>
                             <option value="9">Solicitud de portagalones</option>
-                            <option value="0">Otro</option>
+                            <option value="0" onchange="otromotivo()">Otro</option>
                         </select>
+                        <div class="form-group" id="txtoculto">
+                            <br>
+                            <textarea class="form-control" name="otromotivo" id="otromotivo" cols="10" rows="2"></textarea>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Comentarios:</label>
@@ -647,13 +671,57 @@ require_once("Config/db.php");
                         <input class="form-control" type="file" name="Foto4" id="Foto4">
                         <input class="form-control" type="file" name="Foto5" id="Foto5">
                     </div>
+
             </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-info" data-dismiss="modal">Enviar</button>
+                        <button type="submit" class="btn btn-info" >Enviar</button>
                     </div>
                 </form>
         </div>
 </div>
+    <script>
+        $("#txtoculto").hide();
+
+        $("#inputSelect").on('change', function() {
+            var selectValue = $(this).val();
+            switch (selectValue) {
+                case "0":
+                    $("#txtoculto").show();
+                    break;
+                case "1":
+                    $("#txtoculto").hide();
+                    break;
+                case "2":
+                    $("#txtoculto").hide();
+                    break;
+                case "3":
+                    $("#txtoculto").hide();
+                    break;
+                case "4":
+                    $("#txtoculto").hide();
+                    break;
+                case "5":
+                    $("#txtoculto").hide();
+                    break;
+                case "6":
+                    $("#txtoculto").hide();
+                    break;
+                case "7":
+                    $("#txtoculto").hide();
+                    break;
+                case "8":
+                    $("#txtoculto").hide();
+                    break;
+                case "9":
+                    $("#txtoculto").hide();
+                    break;
+                case "10": $("#txtoculto").hide();
+                    break;
+                default:
+                    $("#txtoculto").hide();
+            }
+        }).change();
+    </script>
     <script>
         $("#enviartickets").on("submit", function(e){
             e.preventDefault();
@@ -669,6 +737,7 @@ require_once("Config/db.php");
                 processData: false
             }).done(function(echo){
                 $("#mensaje").html(echo);
+                $("#txtoculto").hide();
             });
         });
     </script>

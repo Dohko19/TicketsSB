@@ -4,8 +4,45 @@ require ('../Config/db.php');
 //Creamos las variables necesarias
 $motivo = $_POST['motivo'];
 $comentarios = $_POST['comentarios'];
+$otromotivo = $_POST['otromotivo'];
 //$foto1 = $_POST['Foto1'];
-
+switch ($motivo){
+    case 0:
+        $motivo = 'Otro Motivo';
+        $otromotivo = $otromotivo;
+        break;
+    case 1:
+        $motivo = 'Solicitud 4+1';
+        break;
+    case 2:
+        $motivo = 'Compra Jabonera(rota, robo, vandalismo)';
+        break;
+    case 3:
+        $motivo = 'Cambio por uso común';
+        break;
+    case 4:
+        $motivo = 'Envio de Etiquetas y ayudas visuales';
+        break;
+    case 5:
+        $motivo = 'Contenedor para Solucion Sanitizante';
+        break;
+    case 6:
+        $motivo = 'Guia de envio de contenedores';
+        break;
+    case 7:
+        $motivo = 'Tapa oscilante para contenedor';
+        break;
+    case 8:
+        $motivo = 'Guias de envio de tapas';
+        break;
+    case 9:
+        $motivo = 'LGS bimestral';
+        break;
+    case 10: $motivo = 'Solicitud de portagalones';
+        break;
+    default:
+        echo "No Eligio Opción";
+}
 //Filtro anti-XSS
 $caracteres_malos = array("<", ">", "\"", "'", "/", "<", ">", "'", "/");
 $caracteres_buenos = array("&lt;", "&gt;", "&quot;", "&#x27;", "&#x2F;", "&#060;", "&#062;", "&#039;", "&#047;");
@@ -62,7 +99,16 @@ if(empty($motivo)) {
             die( "El archivo ".$nombreArchivo." es demasiado grande. El tamaño máximo del archivo es de ".$tamañoMaximoKB."Kb." );
     }
          //Si el tamaño es correcto, subimos los datos
-         $consulta = "INSERT INTO tickets_web (Motivo, Comentarios, Foto1) VALUES ('$motivo', '$comentarios', '$imagenBinaria')";
+         $anio = date("Y");
+         $mes = date("m");
+         if($otromotivo == null)
+         {
+             $consulta = "INSERT INTO tickets_web (Motivo, Comentarios, Foto1) VALUES ('$motivo', '$comentarios', '$imagenBinaria')";
+         }
+         else{
+             $consulta = "INSERT INTO tickets_web (Motivo, OtroMotivo, Comentarios, Foto1) VALUES ('$motivo', '$otromotivo' ,'$comentarios', '$imagenBinaria')";
+
+         }
 
          //Hacemos la inserción, y si es correcta, se procede
          if(mysqli_query($conn, $consulta)) {
